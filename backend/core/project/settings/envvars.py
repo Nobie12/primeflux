@@ -1,4 +1,3 @@
-# ruff: noqa: F821
 from core.core_functions.utils.collections import deep_update
 from core.core_functions.utils.settings import get_settings_from_environment
 
@@ -6,7 +5,7 @@ from core.core_functions.utils.settings import get_settings_from_environment
 This takes env variables with matching prefix, strips the prefix, and adds it to global variables.
 
 For example:
-export DJANGO_IN_DOCKER=true (environment variable)
+export PRIMEFLUX_IN_DOCKER=true (environment variable)
 
 could then be referenced as:
 IN_DOCKER (where the value would be true)

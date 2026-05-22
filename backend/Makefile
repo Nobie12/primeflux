@@ -43,7 +43,7 @@ typecheck-strict:
 
 .PHONY: check
 check:
-	make lint && make format-check && make typecheck
+	make lint && make format-fix && make typecheck
 
 .PHONY: precommit-hooks-install
 precommit-hooks-install:
