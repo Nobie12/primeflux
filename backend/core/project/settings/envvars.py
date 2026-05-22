@@ -1,3 +1,4 @@
+# ruff: noqa: F821
 from core.core_functions.utils.collections import deep_update
 from core.core_functions.utils.settings import get_settings_from_environment
 
