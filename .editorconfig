@@ -1,0 +1,31 @@
+# https://editorconfig.org/
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Python files (PEP 8 standard)
+[*.py]
+indent_size = 4
+max_line_length = 88
+
+# Django Templates & HTML (2 spaces preferred for deep nesting)
+[*.html]
+indent_size = 2
+
+# JavaScript, JSON, and CSS
+[*.{js,json,css,scss}]
+indent_size = 2
+
+# Configuration files
+[*.{yml,yaml}]
+indent_size = 2
+
+# Makefiles must use tabs
+[Makefile]
+indent_style = tab
