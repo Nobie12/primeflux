@@ -22,7 +22,9 @@ if not LOCAL_SETTINGS_PATH.is_absolute():
 
 include(
     "base.py",
+    "logging.py",
     "custom.py",
     optional(str(LOCAL_SETTINGS_PATH)),
     "envvars.py",
+    "docker.py",
 )

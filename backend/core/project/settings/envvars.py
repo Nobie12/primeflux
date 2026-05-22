@@ -12,5 +12,5 @@ IN_DOCKER (where the value would be true)
 
 """
 
-# globals() is a dictionary of the gloabl variables
+# globals() is a dictionary of the global variables
 deep_update(globals(), get_settings_from_environment(ENVVAR_SETTINGS_PREFIX))

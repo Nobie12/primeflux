@@ -16,6 +16,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "colorlog>=6.10.1",
     "django-stubs>=6.0.4",
     "mypy>=2.1.0",
     "pre-commit>=4.6.0",
