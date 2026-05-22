@@ -19,7 +19,7 @@ superuser:
 	uv run python -m core.manage createsuperuser
 
 .PHONY: update
-update: sync migrate pre-commit-hooks-install;
+update: sync migrate precommit-hooks-install;
 
 .PHONY: lint
 lint:
