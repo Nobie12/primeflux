@@ -19,7 +19,7 @@ superuser:
 	uv run python -m core.manage createsuperuser
 
 .PHONY: update
-update: sync migrate;
+update: sync migrate pre-commit-hooks-install;
 
 .PHONY: lint
 lint:
@@ -44,3 +44,11 @@ typecheck-strict:
 .PHONY: check
 check:
 	make lint && make format-check && make typecheck
+
+.PHONY: precommit-hooks-install
+precommit-hooks-install:
+	uv run pre-commit install
+
+.PHONY: pre-commit-test
+precommit-test:
+	uv run pre-commit run --all-files

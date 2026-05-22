@@ -10,7 +10,7 @@ export DJANGO_IN_DOCKER=true (environment variable)
 
 could then be referenced as:
 IN_DOCKER (where the value would be true)
- 
+
 """
 
 # globals() is a dictionary of the gloabl variables
