@@ -11,3 +11,7 @@ wheels/
 
 db.sqlite3
 local/settings.dev.py
+
+# caches
+.ruff_cache/
+.mypy_cache

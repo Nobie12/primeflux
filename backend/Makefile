@@ -52,3 +52,7 @@ precommit-hooks-install:
 .PHONY: pre-commit-test
 precommit-test:
 	uv run pre-commit run --all-files
+
+.PHONY: tests
+tests:
+	uv run pytest
