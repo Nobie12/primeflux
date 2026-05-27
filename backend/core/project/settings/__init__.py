@@ -22,6 +22,7 @@ if not LOCAL_SETTINGS_PATH.is_absolute():
 
 include(
     "base.py",
+    "third_party.py",
     "logging.py",
     "custom.py",
     optional(str(LOCAL_SETTINGS_PATH)),

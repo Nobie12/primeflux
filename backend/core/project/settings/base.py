@@ -14,7 +14,11 @@ DJANGO_APPS = [
 ]
 
 
-THIRD_PARTY_APPS: list[str] = []
+THIRD_PARTY_APPS: list[str] = [
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
+]
 
 LOCAL_APPS = [
     "core.apps.accounts",
@@ -101,3 +105,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+}
