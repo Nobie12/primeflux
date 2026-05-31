@@ -1,7 +1,14 @@
+from django.core.validators import RegexValidator
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer as BaseTokenSerializer
 
 from core.apps.accounts.models import User
+
+# Match your UserManager: 07 or 01 followed by 8 digits
+kenyan_phone_regex = r"^(07|01)\d{8}$"
+phone_validator = RegexValidator(
+    regex=kenyan_phone_regex, message="Phone number must be 10 digits starting with '07' or '01'."
+)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -47,3 +54,25 @@ class TokenObtainPairSerializer(BaseTokenSerializer):
         }
 
         return data
+
+
+class SendOTPSerializer(serializers.Serializer):
+    phone = serializers.CharField(validators=[phone_validator])
+
+
+class VerifyOTPSerializer(serializers.Serializer):
+    phone = serializers.CharField(validators=[phone_validator])
+    otp = serializers.CharField(
+        min_length=6, max_length=6, validators=[RegexValidator(r"^\d{6}$", "OTP must contain only digits.")]
+    )
+
+
+class SendEmailOTPSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class VerifyEmailOTPSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(
+        min_length=6, max_length=6, validators=[RegexValidator(r"^\d{6}$", "OTP must contain only digits.")]
+    )

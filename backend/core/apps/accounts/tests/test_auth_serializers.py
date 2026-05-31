@@ -1,6 +1,6 @@
 import pytest
 
-from core.apps.accounts.serializers.auth import RegisterSerializer
+from core.apps.accounts.serializers.auth import RegisterSerializer, SendOTPSerializer, VerifyOTPSerializer
 
 """
 Test auth serializers.
@@ -29,3 +29,36 @@ class TestRegisterSerializer:
 
         assert "non_field_errors" in serializer.errors
         assert "National ID is required for drivers." in str(serializer.errors["non_field_errors"])
+
+
+class TestOTPIdSerializers:
+    @pytest.mark.parametrize(
+        "phone, is_valid",
+        [
+            ("0712345678", True),
+            ("0112345678", True),
+            ("071234567", False),
+            ("07123456789", False),
+            ("254712345678", False),
+            ("abcdefghij", False),
+        ],
+    )
+    def test_send_otp_serializer_validation(self, phone, is_valid):
+        data = {"phone": phone}
+        serializer = SendOTPSerializer(data=data)
+        assert serializer.is_valid() == is_valid
+
+    @pytest.mark.parametrize(
+        "phone, otp, is_valid",
+        [
+            ("0712345678", "123456", True),
+            ("0712345678", "12345", False),
+            ("0712345678", "1234567", False),
+            ("0712345678", "abcdef", False),
+            ("12345", "123456", False),
+        ],
+    )
+    def test_verify_otp_serializer_validation(self, phone, otp, is_valid):
+        data = {"phone": phone, "otp": otp}
+        serializer = VerifyOTPSerializer(data=data)
+        assert serializer.is_valid() == is_valid

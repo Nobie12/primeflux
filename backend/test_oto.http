@@ -1,0 +1,7 @@
+###
+POST http://localhost:8000/api/auth/otp/email/send/
+Content-Type: application/json
+
+{
+    "email": "primeflux18@gmail.com"
+}
