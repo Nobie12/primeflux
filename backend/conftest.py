@@ -1,10 +1,12 @@
 import pytest
 from rest_framework.test import APIClient
 
+from core.apps.accounts.models import User
+
 
 @pytest.fixture
 def api_client():
-    """Fixture to provide a DRF APIClient instance."""
+    """Provide a DRF APIClient instance."""
     return APIClient()
 
 
@@ -18,3 +20,16 @@ def user_data():
         "password": "testpassword",
         "national_id": "12345678",
     }
+
+
+@pytest.fixture
+def user(user_data):
+    """Create and return a test user."""
+    return User.objects.create_user(**user_data)
+
+
+@pytest.fixture
+def authenticated_client(api_client, user):
+    """Authenticated API client."""
+    api_client.force_authenticate(user=user)
+    return api_client
