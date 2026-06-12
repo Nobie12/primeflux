@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 
 # JWT SETUP
@@ -14,10 +15,16 @@ SIMPLE_JWT = {
 
 
 # Redis setup
-REDIS_HOST = "127.0.0.1"
-REDIS_PORT = 6379
-REDIS_DB = 0
+REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+REDIS_DB = os.getenv("REDIS_DB", "0")
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
+    }
+}
 
 # DRF setup
 REST_FRAMEWORK = {

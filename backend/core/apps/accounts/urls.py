@@ -1,6 +1,8 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
+from core.apps.accounts.views import health_check_views
+
 from .views.auth_views import (
     LoginView,
     LogoutView,
@@ -22,4 +24,5 @@ urlpatterns = [
     path("auth/otp/email/send/", SendEmailOTPView.as_view(), name="send_email_otp"),
     path("auth/otp/email/verify/", VerifyEmailOTPView.as_view(), name="verify_email_otp"),
     path("profile/", UserView.as_view(), name="profile"),
+    path("health/", health_check_views.health_check, name="health_check"),
 ]

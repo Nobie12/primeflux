@@ -13,7 +13,7 @@ db.sqlite3
 local/settings.dev.py
 
 # logs
-*.log
+logs/django_error.log
 
 # caches
 .ruff_cache/
