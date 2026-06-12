@@ -65,8 +65,14 @@ WSGI_APPLICATION = "core.project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "/home/ken/primeflux/backend/db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "primeflux_db",
+        "USER": "primeflux_user",
+        "PASSWORD": "primeflux_password",
+        "HOST": "localhost",
+        "PORT": "5432",
+        "ATOMIC_REQUESTS": True,
+        "CONN_MAX_AGE": 600,
     }
 }
 

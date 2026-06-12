@@ -1,0 +1,41 @@
+# Stage 1: Build dependencies using uv
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
+
+WORKDIR /app
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
+
+COPY pyproject.toml uv.lock ./
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project --no-dev
+
+# Stage 2: Clean, small final runtime
+FROM python:3.12-slim-bookworm
+
+WORKDIR /app
+
+# Install netcat for network connectivity testing
+RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
+
+# Bring over virtual environment layers
+COPY --from=builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PRIMEFLUX_IN_DOCKER=true
+
+# Copy project source files
+COPY ["README.md", "Makefile"] ./
+COPY core core
+COPY local local
+COPY Docker Docker
+
+# Adjust permissions on script matching your structure exactly
+RUN chmod +x /app/Docker/Django/entrypoint.sh
+
+ENTRYPOINT ["/app/Docker/Django/entrypoint.sh"]
+
+# Step into the core directory where manage.py and project live to run uvicorn
+WORKDIR /app/core
+CMD ["uvicorn", "project.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]

@@ -11,7 +11,9 @@ wheels/
 
 db.sqlite3
 local/settings.dev.py
-logs/
+
+# logs
+*.log
 
 # caches
 .ruff_cache/

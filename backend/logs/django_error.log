@@ -858,3 +858,5 @@ Traceback (most recent call last):
     return super().execute(query, params)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 django.db.utils.OperationalError: no such table: silk_request
+2026-06-12 07:46:09,529 [WARNING] silk.model_factory (line 286): Response to request with pk deebced0-588c-470a-8ef2-58719e9ea91f has content type text/javascript but was unable to parse it
+2026-06-12 07:46:38,722 [WARNING] silk.model_factory (line 286): Response to request with pk 01e77e5c-39e7-4b53-aab6-ba5cbcae6692 has content type text/javascript but was unable to parse it

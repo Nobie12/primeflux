@@ -56,3 +56,8 @@ precommit-test:
 .PHONY: tests
 tests:
 	uv run pytest
+
+.PHONY: up-dependencies-only
+up-dependencies-only:
+	test -f .env || touch .env
+	docker-compose -f docker-compose.dev.yml up

@@ -21,7 +21,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     full_name = models.CharField(max_length=255)
-    password = models.CharField(max_length=20)
+    password = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
     phone = models.CharField(
         max_length=10,
