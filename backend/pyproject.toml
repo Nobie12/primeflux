@@ -75,5 +75,9 @@ disable_error_code = [
     "name-defined",
 ]
 
+[[tool.mypy.overrides]]
+module = "africastalking.*"
+ignore_missing_imports = true
+
 [tool.django-stubs]
 django_settings_module = "core.project.settings"
