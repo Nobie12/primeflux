@@ -1,5 +1,8 @@
+import os
+
 DEBUG = False
-SECRET_KEY = NotImplemented
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-local-development-key-string")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "re_mock_testing_key")
 
 ALLOWED_HOSTS: list[str] = []
 
