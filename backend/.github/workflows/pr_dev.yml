@@ -1,0 +1,84 @@
+name: PR Gatekeeper (QA & Tests)
+
+on:
+  pull_request:
+    branches: [ dev, master ]
+  workflow_dispatch:
+
+jobs:
+  code-quality:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Run Ruff Linter
+        run: make check
+
+      - name: Run Ruff Formatter Check
+        run: make format
+
+  test-suite:
+    name: Run Pytest Matrix
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: primeflux_db
+          POSTGRES_USER: primeflux_user
+          POSTGRES_PASSWORD: primeflux_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U primeflux_user -d primeflux_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install Project Dependencies
+        run: uv sync --frozen
+
+      - name: Run Django Test Matrix
+        env:
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
+          REDIS_DB: 0
+          DATABASE_URL: postgres://primeflux_user:primeflux_password@127.0.0.1:5432/primeflux_db
+        run: make tests

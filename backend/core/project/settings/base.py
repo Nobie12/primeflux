@@ -2,7 +2,6 @@ SECRET_KEY = NotImplemented
 
 ALLOWED_HOSTS: list[str] = []
 
-
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -58,24 +57,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.project.wsgi.application"
-
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "primeflux_db",
-        "USER": "primeflux_user",
-        "PASSWORD": "primeflux_password",
-        "HOST": "localhost",
-        "PORT": "5432",
-        "ATOMIC_REQUESTS": True,
-        "CONN_MAX_AGE": 600,
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

@@ -1,6 +1,20 @@
 import os
 from datetime import timedelta
 
+# Database configuration with dynamic environment capability
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DATABASE_NAME", "primeflux_db"),
+        "USER": os.getenv("DATABASE_USER", "primeflux_user"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD", "primeflux_password"),
+        "HOST": os.getenv("DATABASE_HOST", "localhost"),
+        "PORT": os.getenv("DATABASE_PORT", "5432"),
+        "ATOMIC_REQUESTS": True,
+        "CONN_MAX_AGE": 600,
+    }
+}
+
 # JWT SETUP
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),  # 5 mins is short for dev, maybe 60?
