@@ -35,6 +35,9 @@ jobs:
   test-suite:
     name: Run Pytest Matrix
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
 
     services:
       postgres:
@@ -84,4 +87,7 @@ jobs:
           REDIS_PORT: 6379
           REDIS_DB: 0
           DATABASE_URL: postgres://primeflux_user:primeflux_password@127.0.0.1:5432/primeflux_db
+
+          SECRET_KEY: "ci-test-insecure-signing-key-string-value-here"
+          RESEND_API_KEY: "re_mock_testing_key"
         run: make tests
