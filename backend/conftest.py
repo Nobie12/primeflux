@@ -1,5 +1,16 @@
+import os
+
 import pytest
 from rest_framework.test import APIClient
+
+
+def pytest_configure():
+    """
+    Forcefully inject secure fallbacks into the process environment
+    before Django initializes the project settings layer.
+    """
+    os.environ.setdefault("SECRET_KEY", "ci-test-insecure-signing-key-string-value-here")
+    os.environ.setdefault("RESEND_API_KEY", "re_mock_testing_key")
 
 
 @pytest.fixture
