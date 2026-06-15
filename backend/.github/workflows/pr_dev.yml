@@ -27,8 +27,7 @@ jobs:
         run: make check
 
       - name: Run Ruff Formatter Check
-        run: make format
-
+        run: make check
   test-suite:
     name: Run Pytest Matrix
     runs-on: ubuntu-latest
