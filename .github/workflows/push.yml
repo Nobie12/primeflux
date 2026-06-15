@@ -9,6 +9,9 @@ jobs:
   validate-and-test:
     name: Integration Validation
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
 
     services:
       postgres:
