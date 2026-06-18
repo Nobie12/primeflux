@@ -28,7 +28,8 @@ class TestRegisterSerializer:
         assert not serializer.is_valid()
 
         assert "non_field_errors" in serializer.errors
-        assert "National ID is required for drivers." in str(serializer.errors["non_field_errors"])
+        errors = str(serializer.errors["non_field_errors"])
+        assert "Both National ID and License number are strictly required for drivers." in errors
 
 
 class TestOTPIdSerializers:

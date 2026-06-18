@@ -1,0 +1,120 @@
+### =========================================================================
+### PrimeFlux API E2E Integration Testing File (VS Code REST Client)
+### =========================================================================
+
+@baseUrl = http://localhost:8000/api/v1
+@contentType = application/json
+@email = primeflux18@gmail.com
+@phone = 0723456789
+
+### 1. System Health Check
+GET {{baseUrl}}/health/
+Accept: {{contentType}}
+
+### 2. Register a New Customer User
+POST {{baseUrl}}/auth/register/
+Content-Type: {{contentType}}
+
+{
+    "email": "{{email}}",
+    "full_name": "Ken Eibba",
+    "phone": "{{phone}}",
+    "password": "SecurePassword123!",
+    "role": "customer"
+}
+
+### 3. Register a New Driver User
+POST {{baseUrl}}/auth/register/
+Content-Type: {{contentType}}
+
+{
+    "email": "driver1@primeflux.com",
+    "full_name": "John Driver",
+    "phone": "0711223344",
+    "password": "SecurePassword123!",
+    "role": "driver",
+    "national_id": "12345678",
+    "license_number": "DL99382A"
+}
+
+### 4. Authenticate / Login (Saves Tokens Automatically)
+# @name login
+POST {{baseUrl}}/auth/login/
+Content-Type: {{contentType}}
+
+{
+    "email": "driver1@primeflux.com",
+    "password": "SecurePassword123!"
+}
+
+### Capture tokens from login response
+@accessToken = {{login.response.body.access}}
+@refreshToken = {{login.response.body.refresh}}
+
+### 5. Get Authenticated User Profile (Requires Login)
+GET {{baseUrl}}/profile/
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}
+
+### 6. Update User Profile (Clears Redis Cache)
+# @name updateProfile
+PUT {{baseUrl}}/profile/
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+    "full_name": "Ken Eibba Updated",
+    "phone": "{{phone}}"
+}
+
+### 7. Send Phone OTP via Africa's Talking
+POST {{baseUrl}}/auth/otp/phone/send/
+Content-Type: {{contentType}}
+
+{
+    "phone": "{{phone}}"
+}
+
+### 8. Verify Phone OTP & Activate Status
+POST {{baseUrl}}/auth/otp/phone/verify/
+Content-Type: {{contentType}}
+
+{
+    "phone": "{{phone}}",
+    "otp": "016955"
+}
+
+### 9. Send Email OTP via Resend
+POST {{baseUrl}}/auth/otp/email/send/
+Content-Type: {{contentType}}
+
+{
+    "email": "{{email}}"
+}
+
+### 10. Verify Email OTP & Activate Status
+POST {{baseUrl}}/auth/otp/email/verify/
+Content-Type: {{contentType}}
+
+{
+    "email": "{{email}}",
+    "otp": "553384"
+}
+
+### 11. Refresh Expired Access Token
+# @name tokenRefresh
+POST http://localhost:8000/api/v1/token/refresh/
+Content-Type: {{contentType}}
+
+{
+    "refresh": "{{refreshToken}}"
+}
+
+### 12. Logout (Blacklist Refresh Token)
+POST {{baseUrl}}/auth/logout/
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+    "refresh": "{{refreshToken}}"
+}
