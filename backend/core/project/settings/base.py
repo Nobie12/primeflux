@@ -6,7 +6,6 @@ RESEND_API_KEY = os.getenv("RESEND_API_KEY", "re_mock_testing_key")
 
 ALLOWED_HOSTS: list[str] = []
 
-
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -21,10 +20,14 @@ THIRD_PARTY_APPS: list[str] = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "silk",
+    "drf_spectacular",
+    "django_filters",
 ]
 
 LOCAL_APPS = [
     "core.apps.accounts",
+    "core.apps.logistics",
 ]
 
 
@@ -32,6 +35,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "silk.middleware.SilkyMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -58,18 +62,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.project.wsgi.application"
-
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "/home/ken/primeflux/backend/db.sqlite3",
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -114,4 +106,5 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }

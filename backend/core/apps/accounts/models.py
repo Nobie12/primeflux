@@ -4,7 +4,9 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.db import models
 
-from .managers import UserManager
+from core.apps.logistics.models import Hub
+
+from .managers import DriverManager, UserManager
 
 
 class Roles(models.TextChoices):
@@ -21,7 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     full_name = models.CharField(max_length=255)
-    password = models.CharField(max_length=20)
+    password = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
     phone = models.CharField(
         max_length=10,
@@ -52,3 +54,24 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.full_name
+
+
+class Driver(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="driver_profile", limit_choices_to={"role": "driver"}
+    )
+
+    license_number = models.CharField(max_length=20, unique=True)
+    is_available = models.BooleanField(default=True)
+    current_hub = models.ForeignKey(
+        Hub, on_delete=models.SET_NULL, null=True, blank=True, related_name="drivers_present"
+    )
+    is_verified = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = DriverManager()
+
+    def __str__(self):
+        return f"Driver: {self.user.full_name}"
