@@ -60,4 +60,4 @@ tests:
 .PHONY: up-dependencies-only
 up-dependencies-only:
 	test -f .env || touch .env
-	docker-compose -f docker-compose.dev.yml up
+	docker-compose -f Docker/compose/docker-compose.dev.yml up
