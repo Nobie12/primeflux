@@ -4,9 +4,11 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from core.apps.accounts.filters import UserFilter
 from core.apps.accounts.models import User
 from core.apps.accounts.serializers.driver import DriverProfileSerializer
 from core.apps.accounts.serializers.user import UserSerializer
+from core.core_functions.permissions import IsRole
 from core.core_functions.services.cache.redis_client import RedisClient
 
 
@@ -57,3 +59,16 @@ class UserView(generics.RetrieveUpdateAPIView):
 
         client = RedisClient()
         client.delete(f"user_profile:{user.id}")
+
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    permission_classes = [IsRole.for_roles("admin")]
+    serializer_class = UserSerializer
+
+    filterset_class = UserFilter
+
+    search_fields = ["full_name", "email", "phone", "national_id"]
+    ordering_fields = ["created_at", "updated_at", "full_name", "email"]
+
+    ordering = ["-created_at"]

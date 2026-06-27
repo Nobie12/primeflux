@@ -44,3 +44,16 @@ def authenticated_client(api_client, user):
     """Authenticated API client."""
     api_client.force_authenticate(user=user)
     return api_client
+
+
+@pytest.fixture(autouse=True)
+def disable_throttling(settings):
+    """Dynamically clears out all DRF throttling rates during test execution."""
+    settings.REST_FRAMEWORK = {
+        **getattr(settings, "REST_FRAMEWORK", {}),
+        "DEFAULT_THROTTLE_CLASSES": [],
+        "DEFAULT_THROTTLE_RATES": {
+            "anon": None,
+            "user": None,
+        },
+    }

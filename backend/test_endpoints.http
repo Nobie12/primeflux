@@ -43,8 +43,8 @@ POST {{baseUrl}}/auth/login/
 Content-Type: {{contentType}}
 
 {
-    "email": "driver1@primeflux.com",
-    "password": "SecurePassword123!"
+    "email": "admin@primeflux.com",
+    "password": "AdminPassword123"
 }
 
 ### Capture tokens from login response
@@ -118,3 +118,104 @@ Content-Type: {{contentType}}
 {
     "refresh": "{{refreshToken}}"
 }
+
+### =========================================================================
+### 13. Logistics: Cities (List & Create)
+### =========================================================================
+
+### Get All Cities (Supports Caching, Filtering, & Ordering)
+GET {{baseUrl}}/cities/
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}
+
+### Get Cities with Query Filtering & Search (e.g., Search for Nairobi)
+GET {{baseUrl}}/cities/?search=Nairobi
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}
+
+### Create a New City (Requires Admin Privileges)
+POST {{baseUrl}}/cities/
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+    "name": "Kisumu",
+    "code": "KIS"
+}
+
+
+### =========================================================================
+### 14. Logistics: City Detail (Retrieve, Update, & Destroy)
+### =========================================================================
+
+### Fetch a Specific City by ID
+GET {{baseUrl}}/City/1
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}
+
+### Update a Geopolitical Location Layout
+PUT {{baseUrl}}/City/1
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+    "name": "Nairobi Region Updated",
+    "code": "NBO"
+}
+
+### Delete a Specific City Location Profile
+DELETE {{baseUrl}}/City/1
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}
+
+
+### =========================================================================
+### 15. Logistics: Hubs (List & Create)
+### =========================================================================
+
+### Get Active Hubs List (Validates Redis Caching Strategy)
+GET {{baseUrl}}/hubs/
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}
+
+### Get Hubs with Pagination & Query Params (Great for checking your 20 seed hubs)
+GET {{baseUrl}}/hubs/?page=1
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}
+
+### Create a New Logistics Sorting Hub (Invalidates Active Cache)
+POST {{baseUrl}}/hubs/
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+    "name": "Mombasa Port Gateway Alpha",
+    "city_id": 2,
+    "address": "Kilindini Harbor Road, Section 4"
+}
+
+
+### =========================================================================
+### 16. Logistics: Hub Detail (Retrieve, Update, & Destroy)
+### =========================================================================
+
+### Fetch a Specific Hub Instance Asset
+GET {{baseUrl}}/hub/1
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}
+
+### Update Hub Specifications (Invalidates Active Cache)
+PUT {{baseUrl}}/hub/1
+Authorization: Bearer {{accessToken}}
+Content-Type: {{contentType}}
+
+{
+    "name": "Nairobi Sorting Center Supreme",
+    "city_id": 1,
+    "address": "Mombasa Road, Block B, Nairobi"
+}
+
+### Delete a Specific Infrastructure Hub Node
+DELETE {{baseUrl}}/hub/1
+Authorization: Bearer {{accessToken}}
+Accept: {{contentType}}

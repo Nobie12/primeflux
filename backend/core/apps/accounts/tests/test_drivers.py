@@ -2,15 +2,15 @@ import pytest
 
 from core.apps.accounts.models import Driver, Roles, User
 from core.apps.accounts.serializers.auth import RegisterSerializer
-from core.apps.logistics.models import Hub, Location
+from core.apps.logistics.models import City, Hub
 
 
 @pytest.fixture
 def test_setup_data(db):
-    """Sets up locations, hubs, and base drivers for structural querying tests."""
-    location = Location.objects.create(name="Nairobi Central", code="NBO")
-    hub_alpha = Hub.objects.create(name="Hub Alpha", Location=location, is_active=True)
-    hub_beta = Hub.objects.create(name="Hub Beta", Location=location, is_active=True)
+    """Sets up cities, hubs, and base drivers for structural querying tests."""
+    city = City.objects.create(name="Nairobi Central", code="NBO")
+    hub_alpha = Hub.objects.create(name="Hub Alpha", city=city, is_active=True)
+    hub_beta = Hub.objects.create(name="Hub Beta", city=city, is_active=True)
 
     # Driver 1: Available, stationed at Hub Alpha
     u1 = User.objects.create_user(
