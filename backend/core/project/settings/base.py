@@ -28,6 +28,7 @@ THIRD_PARTY_APPS: list[str] = [
 LOCAL_APPS = [
     "core.apps.accounts",
     "core.apps.logistics",
+    "core.apps.fleet",
 ]
 
 
