@@ -3,6 +3,7 @@ from typing import cast
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser
+from django.db import models
 
 
 class UserManager(BaseUserManager):
@@ -86,3 +87,27 @@ class UserManager(BaseUserManager):
             national_id=national_id,
             **extra_fields,
         )
+
+
+class DriverManagerQuerySet(models.QuerySet):
+    def available(self):
+        return self.filter(is_available=True)
+
+    def located_at(self, hub_id):
+        return self.filter(current_hub_id=hub_id)
+
+
+class DriverManager(models.Manager):
+    """
+    Statically defined manager that safely exposes custom QuerySet methods
+    to satisfy mypy static type checking rules.
+    """
+
+    def get_queryset(self) -> DriverManagerQuerySet:
+        return DriverManagerQuerySet(self.model, using=self._db)
+
+    def available(self):
+        return self.get_queryset().available()
+
+    def located_at(self, hub_id):
+        return self.get_queryset().located_at(hub_id)

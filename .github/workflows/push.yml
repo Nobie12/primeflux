@@ -66,19 +66,23 @@ jobs:
           REDIS_PORT: 6379
           REDIS_DB: 0
           DATABASE_URL: postgres://primeflux_user_dev:primeflux_password_dev@127.0.0.1:5432/primeflux_db_dev
+          # Explicit environment variable overrides for Django settings fallbacks
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: primeflux_db_dev
+          POSTGRES_USER: primeflux_user_dev
+          POSTGRES_PASSWORD: primeflux_password_dev
         run: uv run pytest
 
   deploy-services:
     name: Deploy Application
-    needs: validate-and-test # Will only run if the validation job passes perfectly
+    needs: validate-and-test
     runs-on: ubuntu-latest
     steps:
       - name: Evaluate Deployment Target
         run: |
           if [ "${{ github.ref_name }}" = "master" ]; then
             echo "Execution Context: Production Branch (master)"
-            echo "Place your production CD deployment scripts/hooks here."
           elif [ "${{ github.ref_name }}" = "dev" ]; then
             echo "Execution Context: Development Branch (dev)"
-            echo "Place your staging/dev CD deployment scripts/hooks here."
           fi

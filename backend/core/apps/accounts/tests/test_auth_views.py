@@ -22,7 +22,7 @@ class TestLoginView:
         raw_password = user_data["password"]
         user = User.objects.create_user(**user_data)
 
-        url = reverse("login")
+        url = reverse("login", kwargs={"version": "v1"})
 
         response = api_client.post(
             url,
@@ -40,7 +40,7 @@ class TestLoginView:
 
         # test if the access token is valid and contains the role
         access_token = response.data["access"]
-        token = AccessToken(access_token)  # deode the token to check its content
+        token = AccessToken(access_token)  # decode the token to check its content
 
         assert token["role"] == "customer"
         assert token["user_id"] == str(user.id)
@@ -61,7 +61,7 @@ class TestLogoutView:
         raw_password = user_data["password"]
         User.objects.create_user(**user_data)
 
-        url = reverse("login")
+        url = reverse("login", kwargs={"version": "v1"})
 
         response = api_client.post(
             url,
@@ -78,7 +78,7 @@ class TestLogoutView:
         api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
 
         # Logout
-        logout_url = reverse("logout")
+        logout_url = reverse("logout", kwargs={"version": "v1"})
         response = api_client.post(
             logout_url,
             {
@@ -100,7 +100,7 @@ class TestSendOTPView:
         # Define what the mock should return
         mock_send.return_value = (True, "OTP sent successfully.")
 
-        url = reverse("send_otp")
+        url = reverse("send_otp", kwargs={"version": "v1"})
         phone = "0723456789"
 
         response = api_client.post(url, {"phone": phone}, format="json")
@@ -124,7 +124,7 @@ class TestVerifyOTPView:
         assert user.is_phone_verified is False  # Pre-condition
 
         mock_verify.return_value = (True, "Verification successful.")
-        url = reverse("verify_otp")
+        url = reverse("verify_otp", kwargs={"version": "v1"})
 
         # Action: Send the request
         response = api_client.post(url, {"phone": phone, "otp": "123456"}, format="json")
@@ -146,7 +146,7 @@ class TestVerifyOTPView:
 
         # Service returns failure (e.g. wrong code)
         mock_verify.return_value = (False, "Invalid OTP.")
-        url = reverse("verify_otp")
+        url = reverse("verify_otp", kwargs={"version": "v1"})
 
         response = api_client.post(url, {"phone": phone, "otp": "000000"}, format="json")
 
@@ -160,7 +160,7 @@ class TestEmailOTPViews:
     @patch("resend.Emails.send")
     def test_send_email_otp_success(self, mock_resend, api_client):
         """Test that email OTP is 'sent' and cooldown is triggered."""
-        url = reverse("send_email_otp")
+        url = reverse("send_email_otp", kwargs={"version": "v1"})
         email = "primeflux18@gmail.com"
 
         # Mocking the Resend response
@@ -175,7 +175,7 @@ class TestEmailOTPViews:
     @patch("resend.Emails.send")
     def test_send_email_otp_cooldown(self, mock_resend, api_client):
         """Test that sending twice quickly triggers a 429."""
-        url = reverse("send_email_otp")
+        url = reverse("send_email_otp", kwargs={"version": "v1"})
         email = "primeflux18@gmail.com"
 
         # First call
@@ -199,7 +199,7 @@ class TestEmailOTPViews:
         # Mock service to return success
         mock_verify.return_value = (True, "OTP verified successfully.")
 
-        url = reverse("verify_email_otp")
+        url = reverse("verify_email_otp", kwargs={"version": "v1"})
         response = api_client.post(url, {"email": email, "otp": "123456"}, format="json")
 
         assert response.status_code == 200

@@ -18,7 +18,7 @@ from core.core_functions.services.otp import OTPService
 
 
 class RegisterView(APIView):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = RegisterSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -42,7 +42,7 @@ class LoginView(TokenObtainPairView):
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
 
         try:
             refresh_token = request.data["refresh"]
@@ -62,7 +62,7 @@ class LogoutView(APIView):
 class SendOTPView(APIView):
     """Endpoint to trigger SMS OTP to the user's phone."""
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = SendOTPSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -79,10 +79,10 @@ class SendOTPView(APIView):
 class VerifyOTPView(APIView):
     """Endpoint to verify the 6-digit code and mark user as verified."""
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = VerifyOTPSerializer(data=request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_404_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         phone = serializer.validated_data["phone"]
         otp = serializer.validated_data["otp"]
@@ -100,7 +100,7 @@ class VerifyOTPView(APIView):
 class SendEmailOTPView(APIView):
     """Endpoint to snd  OTP to a specific email."""
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = SendEmailOTPSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_404_BAD_REQUEST)
@@ -118,7 +118,7 @@ class SendEmailOTPView(APIView):
 class VerifyEmailOTPView(APIView):
     """Endpoint to verify the 6-digit code and mark user as verified."""
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = VerifyEmailOTPSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_404_BAD_REQUEST)

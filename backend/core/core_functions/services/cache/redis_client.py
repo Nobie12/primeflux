@@ -11,12 +11,19 @@ class RedisClient:
 
             cls._instance.client = redis.Redis(
                 host=getattr(settings, "REDIS_HOST", "localhost"),
-                port=getattr(settings, "REDIS_PORT", 6379),
-                db=getattr(settings, "REDIS_DB", 0),
+                port=int(getattr(settings, "REDIS_PORT", 6379)),
+                db=int(getattr(settings, "REDIS_DB", 0)),
                 decode_responses=True,  # 4. Converts bytes to strings automatically
             )
 
         return cls._instance
+
+    def ping(self):
+        """Verify if the Redis service is online and reachable."""
+        try:
+            return self.client.ping()
+        except (redis.ConnectionError, redis.TimeoutError):
+            return False
 
     def set(self, key, value, ex=None):
         """Set a value in Redis with an optional expiration time."""
